@@ -1,5 +1,5 @@
 {
-  "name": "protoc-gen-dcl",
+  "name": "protoc-gen-csharp",
   "version": "1.0.0",
   "description": "base component",
   "main": "dist/index.js",
