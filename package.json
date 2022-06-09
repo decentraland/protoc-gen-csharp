@@ -37,7 +37,7 @@
     "dist"
   ],
   "dependencies": {
-    "@dcl/rpc": "^0.1.0",
+    "@dcl/rpc": "^1.0.1",
     "@vercel/ncc": "^0.34.0",
     "ts-protoc-gen": "^0.15.0"
   }
