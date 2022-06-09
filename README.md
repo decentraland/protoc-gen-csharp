@@ -1,4 +1,4 @@
-# protoc-gen-dcl
+# protoc-gen-csharp
 
 ```bash
 protoc \
