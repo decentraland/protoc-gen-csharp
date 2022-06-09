@@ -8,6 +8,10 @@ import { FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_
 //import { generateDclRpcService } from "./codegen/client"
 import { generateServerRpcService } from "./codegen/server"
 
+function capitalizeFirstLetter(text: string) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 /**
  * This is the ProtoC compiler plugin.
  *
@@ -37,7 +41,7 @@ withAllStdIn((inputBuff: Buffer) => {
     })
 
     codeGenRequest.getFileToGenerateList().forEach((fileName) => {
-      const outputFileName = fileName.replace('.proto', '').toUpperCase()
+      const outputFileName = capitalizeFirstLetter(fileName.replace('.proto', ''))
 
       // TODO: Implement client
       /*generateDclRpcService(outputFileName, fileNameToDescriptor[fileName], exportMap).forEach((file) =>

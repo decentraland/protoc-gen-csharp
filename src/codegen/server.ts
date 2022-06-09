@@ -77,19 +77,18 @@ ${registerMethodPrinter.output}
       return result;
   }
 
-  private IEnumerator<UniTask<byte[]>> RegisterStreamFn<T>(IEnumerator<UniTask<T>> generator)
+  private static IEnumerator<UniTask<byte[]>> RegisterStreamFn<T>(IEnumerator<UniTask<T>> generator)
   where T : IMessage
   {
     using (var iterator = generator)
     {
-      while (iterator.MoveNext())
-      {
-        var response = iterator.Current.Result.ToByteArray();
-        yield return UniTask.FromResult(response);
-      }
+        while (iterator.MoveNext())
+        {
+            var response = iterator.Current.GetAwaiter().GetResult().ToByteArray();
+            yield return UniTask.FromResult(response);
+        }
     }
   }
-}
     `)
     printer.printEmptyLn()
   })
