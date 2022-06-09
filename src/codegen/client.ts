@@ -1,4 +1,6 @@
-import { ExportMap } from "ts-protoc-gen/lib/ExportMap"
+// TODO: Implement client for C#
+
+/*import { ExportMap } from "ts-protoc-gen/lib/ExportMap"
 import { Printer } from "ts-protoc-gen/lib/Printer"
 import { CodePrinter } from "ts-protoc-gen/lib/CodePrinter"
 import { FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_pb"
@@ -62,3 +64,4 @@ function generateClientTypeScriptDefinition(fileDescriptor: FileDescriptorProto,
 
   return printer.getOutput()
 }
+*/
