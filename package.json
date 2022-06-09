@@ -1,5 +1,5 @@
 {
-  "name": "protoc-gen-csharp",
+  "name": "protoc-gen-dclunity",
   "version": "1.0.0",
   "description": "base component",
   "main": "dist/index.js",
@@ -11,19 +11,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/decentraland/protoc-gen-csharp.git"
+    "url": "git+https://github.com/decentraland/protoc-gen-dclunity.git"
   },
   "keywords": [],
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/decentraland/protoc-gen-csharp/issues"
+    "url": "https://github.com/decentraland/protoc-gen-dclunity/issues"
   },
   "prettier": {
     "printWidth": 120,
     "semi": false
   },
-  "homepage": "https://github.com/decentraland/protoc-gen-csharp#readme",
+  "homepage": "https://github.com/decentraland/protoc-gen-dclunity#readme",
   "devDependencies": {
     "@types/google-protobuf": "^3.15.5",
     "@types/jest": "^27.0.1",
@@ -38,6 +38,7 @@
   ],
   "dependencies": {
     "@dcl/rpc": "^0.1.0",
+    "@vercel/ncc": "^0.34.0",
     "ts-protoc-gen": "^0.15.0"
   }
 }

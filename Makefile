@@ -36,10 +36,11 @@ install: install_compiler
 
 test: build
 	${PROTOC} \
-		"--plugin=protoc-gen-dcl=./dist/bin.js" \
+		"--plugin=protoc-gen-dclunity=./dist/index.js" \
 		"-I=$(PWD)/test/codegen" \
-		"--js_out=import_style=commonjs,binary:$(PWD)/test/codegen" \
-		"--dcl_out=$(PWD)/test/codegen" \
+		"--dclunity_out=$(PWD)/test/codegen" \
+		"--csharp_out=$(PWD)/test/codegen" \
+		"--csharp_opt=file_extension=.gen.cs" \
 		"$(PWD)/test/codegen/s1.proto"
 	node_modules/.bin/jest --detectOpenHandles --colors --runInBand $(TESTARGS) --coverage
 
@@ -49,7 +50,10 @@ test-watch:
 build:
 	@rm -rf dist || true
 	@mkdir -p dist
-	./node_modules/.bin/tsc -p tsconfig.json
-	chmod +x ./dist/bin.js
+	@NODE_ENV=production node_modules/.bin/ncc build src/bin.ts
+	chmod +x ./dist/index.js
+
+dist:
+	@NODE_ENV=production node_modules/.bin/ncc build src/bin.ts
 
 .PHONY: build test codegen

@@ -37,7 +37,7 @@ withAllStdIn((inputBuff: Buffer) => {
     })
 
     codeGenRequest.getFileToGenerateList().forEach((fileName) => {
-      const outputFileName = replaceProtoSuffix(fileName)
+      const outputFileName = fileName.replace('.proto', '').toUpperCase()
 
       // TODO: Implement client
       /*generateDclRpcService(outputFileName, fileNameToDescriptor[fileName], exportMap).forEach((file) =>
