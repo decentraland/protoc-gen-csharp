@@ -12510,10 +12510,10 @@ function generateServerTypeScriptDefinition(fileDescriptor, exportMap) {
 // Type definitions for server implementations of ports.
 // package: ${serviceDescriptor.packageName}
 // file: ${serviceDescriptor.filename}
-// file: ${JSON.stringify(serviceDescriptor.imports)}
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Google.Protobuf;
+using rpc_csharp.protocol;
 using rpc_csharp.server;`);
     const removePseudoName = (text) => {
         return removePseudoNameFromImportDescriptor(text, serviceDescriptor.imports);
@@ -12526,46 +12526,34 @@ using rpc_csharp.server;`);
     }
     // Services.
     serviceDescriptor.services.forEach((service) => {
+        const serviceHeaderPrinter = new Printer_1.Printer(0);
         const methodsPrinter = new Printer_1.Printer(0);
         const registerMethodPrinter = new Printer_1.Printer(0);
         service.methods.forEach((method) => {
             const responseType = removePseudoName(method.responseType);
             const requestType = removePseudoName(method.requestType);
-            let type = method.responseStream ? `IEnumerator<UniTask<${responseType}>>` : `UniTask<${responseType}>`;
-            methodsPrinter.printIndentedLn(`public abstract ${type} ${method.nameAsPascalCase}(${requestType} request, Context context);`);
+            let type = method.responseStream ? `UniTask<IEnumerator<${responseType}>>` : `UniTask<${responseType}>`;
+            serviceHeaderPrinter.print(`, ${method.nameAsPascalCase} ${method.nameAsCamelCase}`);
+            methodsPrinter.printEmptyLn();
+            methodsPrinter.printIndentedLn(`public delegate ${type} ${method.nameAsPascalCase}(${requestType} request, Context context);`);
             if (method.responseStream) {
-                registerMethodPrinter.printLn(`      result.streamDefinition.Add("${method.nameAsPascalCase}", (payload, context) => { return ${method.nameAsPascalCase}(${requestType}.Parser.ParseFrom(payload), context); });`);
+                registerMethodPrinter.printLn(`    result.streamDefinition.Add("${method.nameAsPascalCase}", async (payload, context) => { return ProtocolHelpers.SerializeMessageEnumerator(await ${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context)); });`);
             }
             else {
-                registerMethodPrinter.printLn(`      result.definition.Add("${method.nameAsPascalCase}", async (payload, context) => { var res = await ${method.nameAsPascalCase}(${requestType}.Parser.ParseFrom(payload), context); return res.ToByteArray(); });`);
+                registerMethodPrinter.printLn(`    result.definition.Add("${method.nameAsPascalCase}", async (payload, context) => { var res = await ${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context); return res?.ToByteString(); });`);
             }
         });
         printer.print(`
 public abstract class ${service.name}<Context>
 {
-  public string ServiceName = "${service.name}";
-
+  public const string ServiceName = "${service.name}";
 ${methodsPrinter.output}
-
-  public ServerModuleDefinition<Context> GetModuleDefinition()
+  public static void RegisterService(RpcServerPort<Context> port${serviceHeaderPrinter.output})
   {
-      var result = new ServerModuleDefinition<Context>();
+    var result = new ServerModuleDefinition<Context>();
       
 ${registerMethodPrinter.output}
-      return result;
-  }
-
-  private static IEnumerator<UniTask<byte[]>> RegisterStreamFn<T>(IEnumerator<UniTask<T>> generator)
-  where T : IMessage
-  {
-    using (var iterator = generator)
-    {
-        while (iterator.MoveNext())
-        {
-            var response = iterator.Current.GetAwaiter().GetResult().ToByteArray();
-            yield return UniTask.FromResult(response);
-        }
-    }
+    port.RegisterModule(ServiceName, (port) => UniTask.FromResult(result));
   }
     `);
         printer.printEmptyLn();
@@ -12573,6 +12561,7 @@ ${registerMethodPrinter.output}
     if (serviceDescriptor.packageName.length > 0) {
         printer.printLn(`}`);
     }
+    printer.printLn(`}`);
     return printer.getOutput();
 }
 
@@ -12637,6 +12626,9 @@ const util_1 = __nccwpck_require__(901);
 const plugin_pb_1 = __nccwpck_require__(211);
 //import { generateDclRpcService } from "./codegen/client"
 const server_1 = __nccwpck_require__(937);
+function capitalizeFirstLetter(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
 /**
  * This is the ProtoC compiler plugin.
  *
@@ -12662,7 +12654,7 @@ const server_1 = __nccwpck_require__(937);
             exportMap.addFileDescriptor(protoFileDescriptor);
         });
         codeGenRequest.getFileToGenerateList().forEach((fileName) => {
-            const outputFileName = fileName.replace('.proto', '').toUpperCase();
+            const outputFileName = capitalizeFirstLetter(fileName.replace('.proto', ''));
             // TODO: Implement client
             /*generateDclRpcService(outputFileName, fileNameToDescriptor[fileName], exportMap).forEach((file) =>
               codeGenResponse.addFile(file)

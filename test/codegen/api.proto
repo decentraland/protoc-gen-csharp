@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package DCLTest;
+package Proto;
 
 message Book {
   int64 isbn = 1;

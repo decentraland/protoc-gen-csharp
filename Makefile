@@ -41,7 +41,7 @@ test: build
 		"--dclunity_out=$(PWD)/test/codegen" \
 		"--csharp_out=$(PWD)/test/codegen" \
 		"--csharp_opt=file_extension=.gen.cs" \
-		"$(PWD)/test/codegen/s1.proto"
+		"$(PWD)/test/codegen/api.proto"
 	node_modules/.bin/jest --detectOpenHandles --colors --runInBand $(TESTARGS) --coverage
 
 test-watch:
