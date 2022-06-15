@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Google.Protobuf;
 using rpc_csharp.protocol;
-using rpc_csharp.server;`)
+using rpc_csharp;`)
 
   const removePseudoName = (text: string) => {
     return removePseudoNameFromImportDescriptor(text, serviceDescriptor.imports)
@@ -53,7 +53,7 @@ using rpc_csharp.server;`)
     service.methods.forEach((method) => {
       const responseType = removePseudoName(method.responseType)
       const requestType = removePseudoName(method.requestType)
-      let type = method.responseStream ? `UniTask<IEnumerator<${responseType}>>` : `UniTask<${responseType}>`
+      let type = method.responseStream ? `IEnumerator<${responseType}>` : `UniTask<${responseType}>`
 
       serviceHeaderPrinter.print(`, ${method.nameAsPascalCase} ${method.nameAsCamelCase}`)
 
@@ -61,7 +61,7 @@ using rpc_csharp.server;`)
       methodsPrinter.printIndentedLn(`public delegate ${type} ${method.nameAsPascalCase}(${requestType} request, Context context);`)
 
       if (method.responseStream) {
-        registerMethodPrinter.printLn(`    result.streamDefinition.Add("${method.nameAsPascalCase}", async (payload, context) => { return ProtocolHelpers.SerializeMessageEnumerator(await ${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context)); });`)
+        registerMethodPrinter.printLn(`    result.streamDefinition.Add("${method.nameAsPascalCase}", (payload, context) => { return ProtocolHelpers.SerializeMessageEnumerator(${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context)); });`)
       } else {
         registerMethodPrinter.printLn(`    result.definition.Add("${method.nameAsPascalCase}", async (payload, context) => { var res = await ${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context); return res?.ToByteString(); });`)
       }
