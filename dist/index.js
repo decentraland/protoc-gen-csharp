@@ -12522,7 +12522,7 @@ using rpc_csharp;`);
         return printer.getOutput();
     }
     if (serviceDescriptor.packageName.length > 0) {
-        printer.printLn(`namespace ${serviceDescriptor.packageName} {`);
+        printer.print(`namespace ${serviceDescriptor.packageName} {`);
     }
     // Services.
     serviceDescriptor.services.forEach((service) => {
@@ -12554,14 +12554,13 @@ ${methodsPrinter.output}
       
 ${registerMethodPrinter.output}
     port.RegisterModule(ServiceName, (port) => UniTask.FromResult(result));
-  }
-    `);
+  }`);
         printer.printEmptyLn();
+        printer.printLn(`}`);
     });
     if (serviceDescriptor.packageName.length > 0) {
         printer.printLn(`}`);
     }
-    printer.printLn(`}`);
     return printer.getOutput();
 }
 
