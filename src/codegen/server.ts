@@ -61,7 +61,7 @@ using rpc_csharp;`)
       methodsPrinter.printIndentedLn(`public delegate ${type} ${method.nameAsPascalCase}(${requestType} request, Context context);`)
 
       if (method.responseStream) {
-        registerMethodPrinter.printLn(`    result.streamDefinition.Add("${method.nameAsPascalCase}", (payload, context) => { return ProtocolHelpers.SerializeMessageEnumerator(${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context)); });`)
+        registerMethodPrinter.printLn(`    result.streamDefinition.Add("${method.nameAsPascalCase}", (payload, context) => { return new ProtocolHelpers.StreamEnumerator<${responseType}>(${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context)); });`)
       } else {
         registerMethodPrinter.printLn(`    result.definition.Add("${method.nameAsPascalCase}", async (payload, context) => { var res = await ${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context); return res?.ToByteString(); });`)
       }
