@@ -21,7 +21,7 @@ public abstract class CRDTService<Context>
     var result = new ServerModuleDefinition<Context>();
       
     result.definition.Add("SendCRDT", async (payload, context) => { var res = await sendCRDT(CRDTManyMessages.Parser.ParseFrom(payload), context); return res?.ToByteString(); });
-    result.streamDefinition.Add("CRDTNotificationStream", (payload, context) => { return ProtocolHelpers.SerializeMessageEnumerator(cRDTNotificationStream(CRDTStreamRequest.Parser.ParseFrom(payload), context)); });
+    result.streamDefinition.Add("CRDTNotificationStream", (payload, context) => { return new ProtocolHelpers.StreamEnumerator<CRDTManyMessages>(cRDTNotificationStream(CRDTStreamRequest.Parser.ParseFrom(payload), context)); });
 
     port.RegisterModule(ServiceName, (port) => UniTask.FromResult(result));
   }
