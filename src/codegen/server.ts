@@ -28,6 +28,7 @@ function generateServerTypeScriptDefinition(fileDescriptor: FileDescriptorProto,
 // package: ${serviceDescriptor.packageName}
 // file: ${serviceDescriptor.filename}
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Google.Protobuf;
 using rpc_csharp.protocol;
@@ -58,12 +59,12 @@ using rpc_csharp;`)
       serviceHeaderPrinter.print(`, ${method.nameAsPascalCase} ${method.nameAsCamelCase}`)
 
       methodsPrinter.printEmptyLn()
-      methodsPrinter.printIndentedLn(`public delegate ${type} ${method.nameAsPascalCase}(${requestType} request, Context context);`)
+      methodsPrinter.printIndentedLn(`public delegate ${type} ${method.nameAsPascalCase}(${requestType} request, Context context ${!method.responseStream? ", CancellationToken ct":""});`)
 
       if (method.responseStream) {
         registerMethodPrinter.printLn(`    result.streamDefinition.Add("${method.nameAsPascalCase}", (payload, context) => { return new ProtocolHelpers.StreamEnumerator<${responseType}>(${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context)); });`)
       } else {
-        registerMethodPrinter.printLn(`    result.definition.Add("${method.nameAsPascalCase}", async (payload, context) => { var res = await ${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context); return res?.ToByteString(); });`)
+        registerMethodPrinter.printLn(`    result.definition.Add("${method.nameAsPascalCase}", async (payload, context, ct) => { var res = await ${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context, ct); return res?.ToByteString(); });`)
       }
     })
 
