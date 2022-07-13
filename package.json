@@ -4,7 +4,7 @@
   "description": "base component",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "bin": "dist/bin.js",
+  "bin": "dist/index.js",
   "scripts": {
     "build": "make build",
     "test": "make test"
