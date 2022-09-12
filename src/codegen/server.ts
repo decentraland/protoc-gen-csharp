@@ -23,6 +23,26 @@ function removePseudoNameFromImportDescriptor(text: string, imports: ImportDescr
   return text
 }
 
+// Converts `Teleport.FromKernel.RequestTeleport`
+// to `global::Teleport.Types.FromKernel.Types.RequestTeleport`
+function convertTypeToCSharp(typeName: string) {
+  const names = typeName.split('.')
+  if (names.length > 1) {
+    let text = 'global::'
+    for (let i = 0; i < names.length; ++i) {
+      const name = names[i]
+      const first = i == 0
+      const last = i == (names.length-1)
+      if (!first) text += '.'
+      text += name
+      if (!last) text += '.Types'
+    }
+    return text
+  } else {
+    return typeName
+  }
+}
+
 function generateServerTypeScriptDefinition(fileDescriptor: FileDescriptorProto, exportMap: ExportMap): string | null {
   const serviceDescriptor = new GrpcServiceDescriptor(fileDescriptor, exportMap)
   if (serviceDescriptor.services.length == 0)
@@ -59,14 +79,14 @@ using rpc_csharp;`)
     const methodsPrinter = new Printer(0)
     const registerMethodPrinter = new Printer(0)
     service.methods.forEach((method) => {
-      const responseType = removePseudoName(method.responseType)
-      const requestType = removePseudoName(method.requestType)
+      const responseType = convertTypeToCSharp(removePseudoName(method.responseType))
+      const requestType = convertTypeToCSharp(removePseudoName(method.requestType))
       let type = method.responseStream ? `IEnumerator<${responseType}>` : `UniTask<${responseType}>`
 
       serviceHeaderPrinter.print(`, ${method.nameAsPascalCase} ${method.nameAsCamelCase}`)
 
       methodsPrinter.printEmptyLn()
-      methodsPrinter.printIndentedLn(`public delegate ${type} ${method.nameAsPascalCase}(${requestType} request, Context context ${!method.responseStream? ", CancellationToken ct":""});`)
+      methodsPrinter.printIndentedLn(`public delegate ${type} ${method.nameAsPascalCase}(${requestType} request, Context context${!method.responseStream? ", CancellationToken ct":""});`)
 
       if (method.responseStream) {
         registerMethodPrinter.printLn(`    result.streamDefinition.Add("${method.nameAsPascalCase}", (payload, context) => { return new ProtocolHelpers.StreamEnumerator<${responseType}>(${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context)); });`)

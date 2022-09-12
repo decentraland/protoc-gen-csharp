@@ -50,6 +50,7 @@ test-watch:
 build:
 	@rm -rf dist || true
 	@mkdir -p dist
+	cp -r bin/* dist/
 	@NODE_ENV=production node_modules/.bin/ncc build src/bin.ts
 	chmod +x ./dist/index.js
 
