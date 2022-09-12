@@ -48,7 +48,7 @@ withAllStdIn((inputBuff: Buffer) => {
         codeGenResponse.addFile(file)
       )*/
 
-      generateServerRpcService(outputFileName, fileNameToDescriptor[fileName], exportMap).forEach((file) =>
+      generateServerRpcService(outputFileName, fileNameToDescriptor[fileName], exportMap)?.forEach((file) =>
         codeGenResponse.addFile(file)
       )
     })
