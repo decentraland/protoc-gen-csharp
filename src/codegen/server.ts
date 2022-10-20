@@ -81,15 +81,26 @@ using rpc_csharp;`)
     service.methods.forEach((method) => {
       const responseType = convertTypeToCSharp(removePseudoName(method.responseType))
       const requestType = convertTypeToCSharp(removePseudoName(method.requestType))
-      let type = method.responseStream ? `IEnumerator<${responseType}>` : `UniTask<${responseType}>`
+      let type = method.responseStream ? `IUniTaskAsyncEnumerable<${responseType}>` : `UniTask<${responseType}>`
 
       serviceHeaderPrinter.print(`, ${method.nameAsPascalCase} ${method.nameAsCamelCase}`)
 
       methodsPrinter.printEmptyLn()
       methodsPrinter.printIndentedLn(`public delegate ${type} ${method.nameAsPascalCase}(${requestType} request, Context context${!method.responseStream? ", CancellationToken ct":""});`)
 
-      if (method.responseStream) {
-        registerMethodPrinter.printLn(`    result.streamDefinition.Add("${method.nameAsPascalCase}", (payload, context) => { return new ProtocolHelpers.StreamEnumerator<${responseType}>(${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context)); });`)
+      if (method.responseStream && method.requestStream) {
+        registerMethodPrinter.printLn(`result.bidirectionalStreamDefinition.Add("${method.nameAsPascalCase}", (IUniTaskAsyncEnumerable<ByteString> payload, Context context) => {`)
+        registerMethodPrinter.printLn(`  return ProtocolHelpers.SerializeMessageEnumerator<${responseType}>(${method.nameAsCamelCase}(`)
+        registerMethodPrinter.printLn(`    ProtocolHelpers.DeserializeMessageEnumerator<${requestType}>(payload, s => ${requestType}.Parser.ParseFrom(s)), context));`)
+        registerMethodPrinter.printLn(`});`)
+      } else if (method.requestStream) {
+        registerMethodPrinter.printLn(`result.clientStreamDefinition.Add("${method.nameAsPascalCase}", async (IUniTaskAsyncEnumerable<ByteString> payload, Context context) => {`)
+        registerMethodPrinter.printLn(`  return (await ${method.nameAsCamelCase}(`)
+        registerMethodPrinter.printLn(`    ProtocolHelpers.DeserializeMessageEnumerator<${requestType}>(payload, s => ${requestType}.Parser.ParseFrom(s)), context))?.ToByteString();`)
+        registerMethodPrinter.printLn(`});`)
+
+      } else if (method.responseStream) {
+        registerMethodPrinter.printLn(`    result.serverStreamDefinition.Add("${method.nameAsPascalCase}", (payload, context) => { return ProtocolHelpers.SerializeMessageEnumerator<${responseType}>(${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context)); });`)
       } else {
         registerMethodPrinter.printLn(`    result.definition.Add("${method.nameAsPascalCase}", async (payload, context, ct) => { var res = await ${method.nameAsCamelCase}(${requestType}.Parser.ParseFrom(payload), context, ct); return res?.ToByteString(); });`)
       }
