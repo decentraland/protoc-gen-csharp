@@ -81,12 +81,14 @@ using rpc_csharp;`)
     service.methods.forEach((method) => {
       const responseType = convertTypeToCSharp(removePseudoName(method.responseType))
       const requestType = convertTypeToCSharp(removePseudoName(method.requestType))
-      let type = method.responseStream ? `IUniTaskAsyncEnumerable<${responseType}>` : `UniTask<${responseType}>`
+      const responseTypeEx = method.responseStream ? `IUniTaskAsyncEnumerable<${responseType}>` : `UniTask<${responseType}>`
+      const requestTypeEx = method.requestStream ? `IUniTaskAsyncEnumerable<${requestType}>` : requestType
+      const requestVarName = method.requestStream ? `streamRequest` : `request`
 
       serviceHeaderPrinter.print(`, ${method.nameAsPascalCase} ${method.nameAsCamelCase}`)
 
       methodsPrinter.printEmptyLn()
-      methodsPrinter.printIndentedLn(`public delegate ${type} ${method.nameAsPascalCase}(${requestType} request, Context context${!method.responseStream? ", CancellationToken ct":""});`)
+      methodsPrinter.printIndentedLn(`public delegate ${responseTypeEx} ${method.nameAsPascalCase}(${requestTypeEx} ${requestVarName}, Context context${!method.responseStream? ", CancellationToken ct":""});`)
 
       if (method.responseStream && method.requestStream) {
         registerMethodPrinter.printLn(`result.bidirectionalStreamDefinition.Add("${method.nameAsPascalCase}", (IUniTaskAsyncEnumerable<ByteString> payload, Context context) => {`)
@@ -94,9 +96,9 @@ using rpc_csharp;`)
         registerMethodPrinter.printLn(`    ProtocolHelpers.DeserializeMessageEnumerator<${requestType}>(payload, s => ${requestType}.Parser.ParseFrom(s)), context));`)
         registerMethodPrinter.printLn(`});`)
       } else if (method.requestStream) {
-        registerMethodPrinter.printLn(`result.clientStreamDefinition.Add("${method.nameAsPascalCase}", async (IUniTaskAsyncEnumerable<ByteString> payload, Context context) => {`)
+        registerMethodPrinter.printLn(`result.clientStreamDefinition.Add("${method.nameAsPascalCase}", async (IUniTaskAsyncEnumerable<ByteString> payload, Context context, CancellationToken ct) => {`)
         registerMethodPrinter.printLn(`  return (await ${method.nameAsCamelCase}(`)
-        registerMethodPrinter.printLn(`    ProtocolHelpers.DeserializeMessageEnumerator<${requestType}>(payload, s => ${requestType}.Parser.ParseFrom(s)), context))?.ToByteString();`)
+        registerMethodPrinter.printLn(`    ProtocolHelpers.DeserializeMessageEnumerator<${requestType}>(payload, s => ${requestType}.Parser.ParseFrom(s)), context, ct))?.ToByteString();`)
         registerMethodPrinter.printLn(`});`)
 
       } else if (method.responseStream) {
