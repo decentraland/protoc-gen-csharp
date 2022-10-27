@@ -91,7 +91,7 @@ using rpc_csharp;`)
       serviceHeaderPrinter.print(`, ${method.nameAsPascalCase} ${method.nameAsCamelCase}`)
 
       methodsPrinter.printEmptyLn()
-      methodsPrinter.printIndentedLn(`protected ${responseTypeEx} ${method.nameAsPascalCase}(${requestTypeEx} ${requestVarName}, Context context${!method.responseStream? ", CancellationToken ct":""});`)
+      methodsPrinter.printIndentedLn(`${responseTypeEx} ${method.nameAsPascalCase}(${requestTypeEx} ${requestVarName}, Context context${!method.responseStream? ", CancellationToken ct":""});`)
 
       if (method.responseStream && method.requestStream) {
         registerMethodPrinter.printLn(`    result.bidirectionalStreamDefinition.Add("${method.nameAsPascalCase}", (IUniTaskAsyncEnumerable<ByteString> payload, Context context) => {`)
@@ -112,7 +112,7 @@ using rpc_csharp;`)
     })
 
     printer.print(`
-public interface class ${serviceNameInterface}<Context>
+public interface ${serviceNameInterface}<Context>
 {
 ${methodsPrinter.output}
 }
@@ -121,7 +121,7 @@ public static class ${service.name}CodeGen
 {
   public const string ServiceName = "${service.name}";
 
-  public static void RegisterService(RpcServerPort<Context> port, ${serviceNameInterface}<Context> service)
+  public static void RegisterService<Context>(RpcServerPort<Context> port, ${serviceNameInterface}<Context> service)
   {
     var result = new ServerModuleDefinition<Context>();
       
