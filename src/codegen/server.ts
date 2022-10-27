@@ -76,7 +76,7 @@ using rpc_csharp;`)
 
   // Services.
   serviceDescriptor.services.forEach((service) => {
-    const serviceNameInterface = `I${service.name}`
+    const serviceClassName = `${service.name}Base`
 
     const serviceHeaderPrinter = new Printer(0)
     const methodsPrinter = new Printer(0)
@@ -112,11 +112,11 @@ using rpc_csharp;`)
     })
 
     printer.print(`
-public abstract class ${serviceNameInterface}<Context>
+public abstract class ${serviceClassName}<Context>
 {
   public const string ServiceName = "${service.name}";
 ${methodsPrinter.output}
-  public static void RegisterService(RpcServerPort<Context> port, ${serviceNameInterface}<Context> service)
+  public static void RegisterService(RpcServerPort<Context> port, ${serviceClassName}<Context> service)
   {
     var result = new ServerModuleDefinition<Context>();
       
