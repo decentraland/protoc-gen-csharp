@@ -60,13 +60,13 @@ using rpc_csharp;`)
 
   // Services.
   serviceDescriptor.services.forEach((service) => {
-
+    const className = `Client${service.name}`
     printer.printLn(
-`public class Client${service.name}Service
+`public class ${className}
 {
   private readonly RpcClientModule module;
 
-  public ClientApiService(RpcClientModule module)
+  public ${className}(RpcClientModule module)
   {
       this.module = module;
   }`)
