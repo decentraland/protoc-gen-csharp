@@ -7,6 +7,7 @@ import { CodeGeneratorRequest, CodeGeneratorResponse } from "google-protobuf/goo
 import { FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_pb"
 //import { generateDclRpcService } from "./codegen/client"
 import { generateServerRpcService } from "./codegen/server"
+import { generateDclRpcService } from "./codegen/client"
 
 function capitalizeFirstLetter(text: string) {
   return text.charAt(0).toUpperCase() + text.slice(1);
@@ -43,10 +44,9 @@ withAllStdIn((inputBuff: Buffer) => {
     codeGenRequest.getFileToGenerateList().forEach((fileName) => {
       const outputFileName = capitalizeFirstLetter(fileName.replace('.proto', ''))
 
-      // TODO: Implement client
-      /*generateDclRpcService(outputFileName, fileNameToDescriptor[fileName], exportMap).forEach((file) =>
+      generateDclRpcService(outputFileName, fileNameToDescriptor[fileName], exportMap).forEach((file) =>
         codeGenResponse.addFile(file)
-      )*/
+      )
 
       generateServerRpcService(outputFileName, fileNameToDescriptor[fileName], exportMap)?.forEach((file) =>
         codeGenResponse.addFile(file)
