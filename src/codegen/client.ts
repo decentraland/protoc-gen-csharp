@@ -55,7 +55,7 @@ using rpc_csharp;`)
   printer.printEmptyLn()
 
   if (serviceDescriptor.packageName.length > 0) {
-    printer.print(`namespace ${serviceDescriptor.packageName} {`)
+    printer.printLn(`namespace ${serviceDescriptor.packageName} {`)
   }
 
   // Services.
