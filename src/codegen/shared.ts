@@ -27,12 +27,17 @@ export function convertTypeToCSharp(typeName: string) {
   }
 }
 
-export function snakeCaseToCamelCase(text: string) {
+export function capitalizeFirstLetter(text: string) {
+  if (text.length >= 2) return text.charAt(0).toUpperCase() + text.slice(1)
+  else return text
+}
+
+export function snakeCaseToPascalCase(text: string) {
   return text
     .split("_")
     .reduce(
       (res, word, i) =>
-        i === 0 ? word.toLowerCase() : `${res}${word.charAt(0).toUpperCase()}${word.substr(1).toLowerCase()}`,
+        i === 0 ? capitalizeFirstLetter(word) : `${res}${capitalizeFirstLetter(word)}`,
       ""
     )
 }

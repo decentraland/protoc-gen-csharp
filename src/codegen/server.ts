@@ -3,7 +3,7 @@ import { Printer } from "ts-protoc-gen/lib/Printer"
 import { FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_pb"
 import { CodeGeneratorResponse } from "google-protobuf/google/protobuf/compiler/plugin_pb"
 import { createFile, GrpcServiceDescriptor, ImportDescriptor } from "ts-protoc-gen/lib/service/common"
-import { convertTypeToCSharp, removePseudoNameFromImportDescriptor, snakeCaseToCamelCase } from "./shared"
+import { convertTypeToCSharp, removePseudoNameFromImportDescriptor, snakeCaseToPascalCase } from "./shared"
 import * as path from 'path'
 
 export function generateServerRpcService(
@@ -14,7 +14,7 @@ export function generateServerRpcService(
   const code = generateServerTypeScriptDefinition(descriptor, exportMap)
   if (code == null)
     return null
-    const baseName = snakeCaseToCamelCase(path.basename(filename))
+    const baseName = snakeCaseToPascalCase(path.basename(filename))
     return [createFile(code, `${baseName}Service.gen.cs`)]
 }
 
