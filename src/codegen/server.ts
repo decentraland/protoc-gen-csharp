@@ -3,6 +3,7 @@ import { Printer } from "ts-protoc-gen/lib/Printer"
 import { FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_pb"
 import { CodeGeneratorResponse } from "google-protobuf/google/protobuf/compiler/plugin_pb"
 import { createFile, GrpcServiceDescriptor, ImportDescriptor } from "ts-protoc-gen/lib/service/common"
+import { convertTypeToCSharp, removePseudoNameFromImportDescriptor } from "./shared"
 
 
 export function generateServerRpcService(
@@ -15,33 +16,6 @@ export function generateServerRpcService(
     return null
 
     return [createFile(code, `${filename}Service.gen.cs`)]
-}
-
-function removePseudoNameFromImportDescriptor(text: string, imports: ImportDescriptor[]) {
-  for (let i of imports) {
-    text = text.replace(i.namespace + ".", '')
-  }
-  return text
-}
-
-// Converts `Teleport.FromKernel.RequestTeleport`
-// to `global::Teleport.Types.FromKernel.Types.RequestTeleport`
-function convertTypeToCSharp(typeName: string) {
-  const names = typeName.split('.')
-  if (names.length > 1) {
-    let text = 'global::'
-    for (let i = 0; i < names.length; ++i) {
-      const name = names[i]
-      const first = i == 0
-      const last = i == (names.length-1)
-      if (!first) text += '.'
-      text += name
-      if (!last) text += '.Types'
-    }
-    return text
-  } else {
-    return typeName
-  }
 }
 
 function generateServerTypeScriptDefinition(fileDescriptor: FileDescriptorProto, exportMap: ExportMap): string | null {
