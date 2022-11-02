@@ -1,17 +1,22 @@
 import { ExportMap } from "ts-protoc-gen/lib/ExportMap"
 import { Printer } from "ts-protoc-gen/lib/Printer"
-import { CodePrinter } from "ts-protoc-gen/lib/CodePrinter"
 import { FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_pb"
 import { CodeGeneratorResponse } from "google-protobuf/google/protobuf/compiler/plugin_pb"
 import { createFile, RPCMethodDescriptor, RPCDescriptor, GrpcServiceDescriptor } from "ts-protoc-gen/lib/service/common"
-import { convertTypeToCSharp, removePseudoNameFromImportDescriptor } from "./shared"
+import { capitalizeFirstLetter, convertTypeToCSharp, removePseudoNameFromImportDescriptor } from "./shared"
+import * as path from 'path'
 
 export function generateDclRpcService(
   filename: string,
   descriptor: FileDescriptorProto,
   exportMap: ExportMap
-): CodeGeneratorResponse.File[] {
-  return [createFile(generateClientTypeScriptDefinition(descriptor, exportMap), `Client${filename}Service.gen.cs`)]
+): CodeGeneratorResponse.File[] | null {
+  const code = generateClientTypeScriptDefinition(descriptor, exportMap)
+  if (code == null)
+    return null
+
+  const baseName = capitalizeFirstLetter(path.basename(filename))
+  return [createFile(code, `Client${baseName}Service.gen.cs`)]
 }
 
 function getCallName(method: RPCMethodDescriptor) {
@@ -27,9 +32,11 @@ function getCallName(method: RPCMethodDescriptor) {
 
 }
 
-function generateClientTypeScriptDefinition(fileDescriptor: FileDescriptorProto, exportMap: ExportMap): string {
+function generateClientTypeScriptDefinition(fileDescriptor: FileDescriptorProto, exportMap: ExportMap): string | null {
 
   const serviceDescriptor = new GrpcServiceDescriptor(fileDescriptor, exportMap)
+  if (serviceDescriptor.services.length == 0)
+    return null
 
   const removePseudoName = (text: string) => {
     return removePseudoNameFromImportDescriptor(text, serviceDescriptor.imports)

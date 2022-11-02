@@ -26,3 +26,10 @@ export function convertTypeToCSharp(typeName: string) {
         return typeName
     }
 }
+
+export function capitalizeFirstLetter(text: string) {
+    if (text.length >= 2)
+        return text.charAt(0).toUpperCase() + text.slice(1);
+    else
+        return text
+  }
