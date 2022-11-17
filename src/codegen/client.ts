@@ -16,7 +16,8 @@ export function generateDclRpcService(
     return null
 
   const baseName = snakeCaseToPascalCase(path.basename(filename))
-  return [createFile(code, `Client${baseName}Service.gen.cs`)]
+  const basePath = path.dirname(filename)
+  return [createFile(code, `${basePath}/Client${baseName}Service.gen.cs`)]
 }
 
 function getCallName(method: RPCMethodDescriptor) {

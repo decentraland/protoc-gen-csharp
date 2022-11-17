@@ -15,7 +15,8 @@ export function generateServerRpcService(
   if (code == null)
     return null
     const baseName = snakeCaseToPascalCase(path.basename(filename))
-    return [createFile(code, `${baseName}Service.gen.cs`)]
+    const basePath = path.dirname(filename)
+    return [createFile(code, `${basePath}/${baseName}Service.gen.cs`)]
 }
 
 function generateServerTypeScriptDefinition(fileDescriptor: FileDescriptorProto, exportMap: ExportMap): string | null {
