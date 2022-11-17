@@ -3,7 +3,7 @@ import { Printer } from "ts-protoc-gen/lib/Printer"
 import { FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_pb"
 import { CodeGeneratorResponse } from "google-protobuf/google/protobuf/compiler/plugin_pb"
 import { createFile, RPCMethodDescriptor, RPCDescriptor, GrpcServiceDescriptor } from "ts-protoc-gen/lib/service/common"
-import { convertTypeToCSharp, removePseudoNameFromImportDescriptor, snakeCaseToPascalCase } from "./shared"
+import { convertTypeToCSharp, printCSharpImports, removePseudoNameFromImportDescriptor, snakeCaseToPascalCase } from "./shared"
 import * as path from 'path'
 
 export function generateDclRpcService(
@@ -60,6 +60,7 @@ function generateClientTypeScriptDefinition(fileDescriptor: FileDescriptorProto,
   printer.printLn(
 `using Cysharp.Threading.Tasks;
 using rpc_csharp;`)
+  printCSharpImports(printer, serviceDescriptor.imports)
   printer.printEmptyLn()
 
   if (serviceDescriptor.packageName.length > 0) {

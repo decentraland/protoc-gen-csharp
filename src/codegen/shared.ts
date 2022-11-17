@@ -1,3 +1,4 @@
+import { Printer } from "ts-protoc-gen/lib/Printer"
 import { ImportDescriptor } from "ts-protoc-gen/lib/service/common"
 
 export function removePseudoNameFromImportDescriptor(text: string, imports: ImportDescriptor[]) {
@@ -35,9 +36,13 @@ export function capitalizeFirstLetter(text: string) {
 export function snakeCaseToPascalCase(text: string) {
   return text
     .split("_")
-    .reduce(
-      (res, word, i) =>
-        i === 0 ? capitalizeFirstLetter(word) : `${res}${capitalizeFirstLetter(word)}`,
-      ""
-    )
+    .reduce((res, word, i) => (i === 0 ? capitalizeFirstLetter(word) : `${res}${capitalizeFirstLetter(word)}`), "")
+}
+
+export function printCSharpImports(printer: Printer, imports: ImportDescriptor[]) {
+  imports.forEach((e) => {
+    if (e.namespace === "google_protobuf_empty_pb") {
+      printer.printLn(`using Google.Protobuf.WellKnownTypes;`)
+    }
+  })
 }

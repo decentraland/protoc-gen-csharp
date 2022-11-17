@@ -3,7 +3,7 @@ import { Printer } from "ts-protoc-gen/lib/Printer"
 import { FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_pb"
 import { CodeGeneratorResponse } from "google-protobuf/google/protobuf/compiler/plugin_pb"
 import { createFile, GrpcServiceDescriptor, ImportDescriptor } from "ts-protoc-gen/lib/service/common"
-import { convertTypeToCSharp, removePseudoNameFromImportDescriptor, snakeCaseToPascalCase } from "./shared"
+import { convertTypeToCSharp, printCSharpImports, removePseudoNameFromImportDescriptor, snakeCaseToPascalCase } from "./shared"
 import * as path from 'path'
 
 export function generateServerRpcService(
@@ -36,6 +36,7 @@ using Cysharp.Threading.Tasks;
 using Google.Protobuf;
 using rpc_csharp.protocol;
 using rpc_csharp;`)
+  printCSharpImports(printer, serviceDescriptor.imports)
 
   const removePseudoName = (text: string) => {
     return removePseudoNameFromImportDescriptor(text, serviceDescriptor.imports)

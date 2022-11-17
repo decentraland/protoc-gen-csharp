@@ -1,5 +1,9 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
+package codegen.test;
+
 message Book {
   int64 isbn = 1;
   string title = 2;
@@ -19,4 +23,5 @@ service BookService {
   rpc QueryBooks(QueryBooksRequest) returns (stream Book) {}
   rpc GetBookStream(stream GetBookRequest) returns (Book) {}
   rpc QueryBooksStream(stream GetBookRequest) returns (stream Book) {}
+  rpc Empty(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
