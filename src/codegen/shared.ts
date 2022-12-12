@@ -39,6 +39,13 @@ export function snakeCaseToPascalCase(text: string) {
     .reduce((res, word, i) => (i === 0 ? capitalizeFirstLetter(word) : `${res}${capitalizeFirstLetter(word)}`), "")
 }
 
+export function namespaceToPascalCase(text: string): string {
+  return text
+    .split('.')
+    .map(word => word[0].toUpperCase() + word.replace(/_(\w)/g, (match, letter) => letter.toUpperCase()).slice(1))
+    .join('.');
+}
+
 export function printCSharpImports(printer: Printer, imports: ImportDescriptor[]) {
   imports.forEach((e) => {
     if (e.namespace === "google_protobuf_empty_pb") {

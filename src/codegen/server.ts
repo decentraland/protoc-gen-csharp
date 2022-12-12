@@ -3,7 +3,7 @@ import { Printer } from "ts-protoc-gen/lib/Printer"
 import { FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_pb"
 import { CodeGeneratorResponse } from "google-protobuf/google/protobuf/compiler/plugin_pb"
 import { createFile, GrpcServiceDescriptor, ImportDescriptor } from "ts-protoc-gen/lib/service/common"
-import { convertTypeToCSharp, printCSharpImports, removePseudoNameFromImportDescriptor, snakeCaseToPascalCase } from "./shared"
+import { convertTypeToCSharp, namespaceToPascalCase, printCSharpImports, removePseudoNameFromImportDescriptor, snakeCaseToPascalCase } from "./shared"
 import * as path from 'path'
 
 export function generateServerRpcService(
@@ -47,7 +47,7 @@ using rpc_csharp;`)
   }
 
   if (serviceDescriptor.packageName.length > 0) {
-    printer.print(`namespace ${serviceDescriptor.packageName} {`)
+    printer.print(`namespace ${namespaceToPascalCase(serviceDescriptor.packageName)} {`)
   }
 
   // Services.
