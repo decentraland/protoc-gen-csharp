@@ -44,6 +44,8 @@ function generateClientTypeScriptDefinition(fileDescriptor: FileDescriptorProto,
   }
 
   const printer = new Printer(0)
+  const classMethods = new Printer(0)
+  const interfaceMethods = new Printer(0)
 
   // Header.
   printer.printLn(`
@@ -70,15 +72,6 @@ using rpc_csharp;`)
   // Services.
   serviceDescriptor.services.forEach((service) => {
     const className = `Client${service.name}`
-    printer.printLn(
-`public class ${className}
-{
-  private readonly RpcClientModule module;
-
-  public ${className}(RpcClientModule module)
-  {
-      this.module = module;
-  }`)
 
     service.methods.forEach((method) => {
       const responseType = convertTypeToCSharp(removePseudoName(method.responseType))
@@ -88,15 +81,31 @@ using rpc_csharp;`)
       const requestVarName = method.requestStream ? `streamRequest` : `request`
       const callName = getCallName(method)
 
-      printer.printLn(
+      classMethods.printLn(
 `
   public ${responseTypeEx} ${method.nameAsPascalCase}(${requestTypeEx} ${requestVarName})
   {
       return module.${callName}<${responseType}>("${method.nameAsPascalCase}", ${requestVarName});
   }`)
+      interfaceMethods.printEmptyLn()
+      interfaceMethods.printIndentedLn(`${responseTypeEx} ${method.nameAsPascalCase}(${requestTypeEx} ${requestVarName});`)
     })
 
-    printer.printLn(`}`)
+    printer.printLn(
+`public interface I${className}
+{${interfaceMethods.getOutput()}}
+
+public class ${className} : I${className}
+{
+  private readonly RpcClientModule module;
+
+  public ${className}(RpcClientModule module)
+  {
+      this.module = module;
+  }
+
+  ${classMethods.getOutput()}
+}`)
   })
 
   if (serviceDescriptor.packageName.length > 0) {

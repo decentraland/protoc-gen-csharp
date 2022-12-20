@@ -7,8 +7,21 @@ using Cysharp.Threading.Tasks;
 using rpc_csharp;
 using Google.Protobuf.WellKnownTypes;
 
-namespace codegen.test {
-public class ClientBookService
+namespace Codegen.Test {
+public interface IClientBookService
+{
+  UniTask<Book> GetBook(GetBookRequest request);
+
+  IUniTaskAsyncEnumerable<Book> QueryBooks(QueryBooksRequest request);
+
+  UniTask<Book> GetBookStream(IUniTaskAsyncEnumerable<GetBookRequest> streamRequest);
+
+  IUniTaskAsyncEnumerable<Book> QueryBooksStream(IUniTaskAsyncEnumerable<GetBookRequest> streamRequest);
+
+  UniTask<Empty> Empty(Empty request);
+}
+
+public class ClientBookService : public IClientBookService
 {
   private readonly RpcClientModule module;
 
@@ -17,29 +30,31 @@ public class ClientBookService
       this.module = module;
   }
 
-  public UniTask<test_api_test_pb.Book> GetBook(GetBookRequest request)
+  
+  public UniTask<Book> GetBook(GetBookRequest request)
   {
-      return module.CallUnaryProcedure<test_api_test_pb.Book>("GetBook", request);
+      return module.CallUnaryProcedure<Book>("GetBook", request);
   }
 
-  public IUniTaskAsyncEnumerable<test_api_test_pb.Book> QueryBooks(QueryBooksRequest request)
+  public IUniTaskAsyncEnumerable<Book> QueryBooks(QueryBooksRequest request)
   {
-      return module.CallServerStream<test_api_test_pb.Book>("QueryBooks", request);
+      return module.CallServerStream<Book>("QueryBooks", request);
   }
 
-  public UniTask<test_api_test_pb.Book> GetBookStream(IUniTaskAsyncEnumerable<GetBookRequest> streamRequest)
+  public UniTask<Book> GetBookStream(IUniTaskAsyncEnumerable<GetBookRequest> streamRequest)
   {
-      return module.CallClientStream<test_api_test_pb.Book>("GetBookStream", streamRequest);
+      return module.CallClientStream<Book>("GetBookStream", streamRequest);
   }
 
-  public IUniTaskAsyncEnumerable<test_api_test_pb.Book> QueryBooksStream(IUniTaskAsyncEnumerable<GetBookRequest> streamRequest)
+  public IUniTaskAsyncEnumerable<Book> QueryBooksStream(IUniTaskAsyncEnumerable<GetBookRequest> streamRequest)
   {
-      return module.CallBidirectionalStream<test_api_test_pb.Book>("QueryBooksStream", streamRequest);
+      return module.CallBidirectionalStream<Book>("QueryBooksStream", streamRequest);
   }
 
-  public UniTask<google_protobuf_empty_pb.Empty> Empty(Empty request)
+  public UniTask<Empty> Empty(Empty request)
   {
-      return module.CallUnaryProcedure<google_protobuf_empty_pb.Empty>("Empty", request);
+      return module.CallUnaryProcedure<Empty>("Empty", request);
   }
+
 }
 }

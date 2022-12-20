@@ -25,22 +25,20 @@ namespace Codegen.Test {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChN0ZXN0L2FwaV90ZXN0LnByb3RvEgxjb2RlZ2VuLnRlc3QaG2dvb2dsZS9w",
-            "cm90b2J1Zi9lbXB0eS5wcm90byIzCgRCb29rEgwKBGlzYm4YASABKAMSDQoF",
-            "dGl0bGUYAiABKAkSDgoGYXV0aG9yGAMgASgJIh4KDkdldEJvb2tSZXF1ZXN0",
-            "EgwKBGlzYm4YASABKAMiKgoRUXVlcnlCb29rc1JlcXVlc3QSFQoNYXV0aG9y",
-            "X3ByZWZpeBgBIAEoCTLhAgoLQm9va1NlcnZpY2USPQoHR2V0Qm9vaxIcLmNv",
-            "ZGVnZW4udGVzdC5HZXRCb29rUmVxdWVzdBoSLmNvZGVnZW4udGVzdC5Cb29r",
-            "IgASRQoKUXVlcnlCb29rcxIfLmNvZGVnZW4udGVzdC5RdWVyeUJvb2tzUmVx",
-            "dWVzdBoSLmNvZGVnZW4udGVzdC5Cb29rIgAwARJFCg1HZXRCb29rU3RyZWFt",
-            "EhwuY29kZWdlbi50ZXN0LkdldEJvb2tSZXF1ZXN0GhIuY29kZWdlbi50ZXN0",
-            "LkJvb2siACgBEkoKEFF1ZXJ5Qm9va3NTdHJlYW0SHC5jb2RlZ2VuLnRlc3Qu",
-            "R2V0Qm9va1JlcXVlc3QaEi5jb2RlZ2VuLnRlc3QuQm9vayIAKAEwARI5CgVF",
-            "bXB0eRIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1",
-            "Zi5FbXB0eSIAYgZwcm90bzM="));
+            "cm90b2J1Zi9lbXB0eS5wcm90bxoTY29tbW9uL2NvbW1vbi5wcm90byIeCg5H",
+            "ZXRCb29rUmVxdWVzdBIMCgRpc2JuGAEgASgDIioKEVF1ZXJ5Qm9va3NSZXF1",
+            "ZXN0EhUKDWF1dGhvcl9wcmVmaXgYASABKAky6QIKC0Jvb2tTZXJ2aWNlEj8K",
+            "B0dldEJvb2sSHC5jb2RlZ2VuLnRlc3QuR2V0Qm9va1JlcXVlc3QaFC5jb2Rl",
+            "Z2VuLmNvbW1vbi5Cb29rIgASRwoKUXVlcnlCb29rcxIfLmNvZGVnZW4udGVz",
+            "dC5RdWVyeUJvb2tzUmVxdWVzdBoULmNvZGVnZW4uY29tbW9uLkJvb2siADAB",
+            "EkcKDUdldEJvb2tTdHJlYW0SHC5jb2RlZ2VuLnRlc3QuR2V0Qm9va1JlcXVl",
+            "c3QaFC5jb2RlZ2VuLmNvbW1vbi5Cb29rIgAoARJMChBRdWVyeUJvb2tzU3Ry",
+            "ZWFtEhwuY29kZWdlbi50ZXN0LkdldEJvb2tSZXF1ZXN0GhQuY29kZWdlbi5j",
+            "b21tb24uQm9vayIAKAEwARI5CgVFbXB0eRIWLmdvb2dsZS5wcm90b2J1Zi5F",
+            "bXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIAYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Codegen.Common.CommonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Codegen.Test.Book), global::Codegen.Test.Book.Parser, new[]{ "Isbn", "Title", "Author" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Codegen.Test.GetBookRequest), global::Codegen.Test.GetBookRequest.Parser, new[]{ "Isbn" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Codegen.Test.QueryBooksRequest), global::Codegen.Test.QueryBooksRequest.Parser, new[]{ "AuthorPrefix" }, null, null, null, null)
           }));
@@ -49,269 +47,6 @@ namespace Codegen.Test {
 
   }
   #region Messages
-  public sealed partial class Book : pb::IMessage<Book>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<Book> _parser = new pb::MessageParser<Book>(() => new Book());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<Book> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Codegen.Test.ApiTestReflection.Descriptor.MessageTypes[0]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public Book() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public Book(Book other) : this() {
-      isbn_ = other.isbn_;
-      title_ = other.title_;
-      author_ = other.author_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public Book Clone() {
-      return new Book(this);
-    }
-
-    /// <summary>Field number for the "isbn" field.</summary>
-    public const int IsbnFieldNumber = 1;
-    private long isbn_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public long Isbn {
-      get { return isbn_; }
-      set {
-        isbn_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "title" field.</summary>
-    public const int TitleFieldNumber = 2;
-    private string title_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Title {
-      get { return title_; }
-      set {
-        title_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "author" field.</summary>
-    public const int AuthorFieldNumber = 3;
-    private string author_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Author {
-      get { return author_; }
-      set {
-        author_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as Book);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(Book other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (Isbn != other.Isbn) return false;
-      if (Title != other.Title) return false;
-      if (Author != other.Author) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (Isbn != 0L) hash ^= Isbn.GetHashCode();
-      if (Title.Length != 0) hash ^= Title.GetHashCode();
-      if (Author.Length != 0) hash ^= Author.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (Isbn != 0L) {
-        output.WriteRawTag(8);
-        output.WriteInt64(Isbn);
-      }
-      if (Title.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Title);
-      }
-      if (Author.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(Author);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Isbn != 0L) {
-        output.WriteRawTag(8);
-        output.WriteInt64(Isbn);
-      }
-      if (Title.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Title);
-      }
-      if (Author.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(Author);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (Isbn != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Isbn);
-      }
-      if (Title.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Title);
-      }
-      if (Author.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Author);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(Book other) {
-      if (other == null) {
-        return;
-      }
-      if (other.Isbn != 0L) {
-        Isbn = other.Isbn;
-      }
-      if (other.Title.Length != 0) {
-        Title = other.Title;
-      }
-      if (other.Author.Length != 0) {
-        Author = other.Author;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            Isbn = input.ReadInt64();
-            break;
-          }
-          case 18: {
-            Title = input.ReadString();
-            break;
-          }
-          case 26: {
-            Author = input.ReadString();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 8: {
-            Isbn = input.ReadInt64();
-            break;
-          }
-          case 18: {
-            Title = input.ReadString();
-            break;
-          }
-          case 26: {
-            Author = input.ReadString();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
   public sealed partial class GetBookRequest : pb::IMessage<GetBookRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -326,7 +61,7 @@ namespace Codegen.Test {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Codegen.Test.ApiTestReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Codegen.Test.ApiTestReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -515,7 +250,7 @@ namespace Codegen.Test {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Codegen.Test.ApiTestReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Codegen.Test.ApiTestReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

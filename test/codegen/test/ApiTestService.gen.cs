@@ -9,7 +9,7 @@ using Google.Protobuf;
 using rpc_csharp.protocol;
 using rpc_csharp;
 using Google.Protobuf.WellKnownTypes;
-namespace codegen.test {
+namespace Codegen.Test {
 public interface IBookService<Context>
 {
 
